@@ -137,7 +137,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Use a different directory for collecting static files during deployment on Heroku
 if os.getenv('HEROKU_ENV', False):
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = '/static'  # Update the STATIC_ROOT for Heroku
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
