@@ -1,0 +1,1 @@
+web: gunicorn corrila.wsgi --log-file -

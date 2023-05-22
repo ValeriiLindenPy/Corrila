@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<main>
+  <div class="container-fluid box-green">
+    <div class="container intro">
+      <div class="row justify-content-md-center">
+        <div class="col-md-9 text-center boxer p-0">
+          <p>Correlate your data properly</p>
+        </div>
+        <div class="col-md-1 text-center boxer p-0"><img src="{% static 'core/img/download-removebg-preview.png' %}"
+            alt="icon-graph"></div>
+      </div>
+      <div class="row justify-content-md-center mt-4">
+        <div class="col-md-5">
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="{% url 'correlate' %}" class="btn btn-dark p-3 button-text" type="button">Try it now!</a>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row about">
+      <div class="col-md-12 text-center">
+        <h1>Corrila offers you an effective ways to find correlations in your data</h1>
+
+        <p>We created this project to help scientific community with data handling in correlation part. You no longer
+          need to independently calculate the correlation coefficient by learning programming languages and installing
+          specialized software on your computer. You just need to upload your data - and in a few seconds Corrila will
+          give you the finished result.
+        </p>
+        <p>WE HOPE IT’LL HELPS YOU! </p>
+      </div>
+
+
+    </div>
+
+
+    <div class="row feature">
+
+      <div class="col-md-12 text-center pt-5 pb-5">
+        <h1>Features</h1>
+
+      </div>
+
+
+
+      <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-header c-title">Three correlation coefficient types</div>
+          <div class="card-body c-body">
+            <h5 class="card-text c-body">in Corrila you can choose from three correlation coefficient types:</h5>
+            <ul class="c-body">
+              <li>Pearson’s r</li>
+              <li>Spearman’s rho</li>
+              <li>Kendall’s tau</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-header c-title">Comfortable file format </div>
+          <div class="card-body">
+            <p class="card-text c-body">We use a convenient file format - excel. This will speed up the time in data
+              post-processing. It is also a very convenient format for data exchange. Supporting extensions: </p>
+            <ul class="c-body">
+              <li>xls, xlsx, xlsm, xlsb</li>
+              <li>odf, ods and odt</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-header c-title">It's online!</div>
+          <div class="card-body">
+            <p class="card-text c-body">Corrila provides free online tools for data correlation. Choose the type of
+              correlation
+              coefficient: Pearson, Spearman or Kendall and get the results without having to download additional
+              software.</p>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="row article pb-5">
+
+      <div class="col-md-12 text-center pt-5 pb-5">
+        <h1>Related articles</h1>
+      </div>
+
+      {% for article in articles %}
+
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <img src="{% static 'core/img/article.jpg' %}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.preview_text }}</p>
+            <a href="{{ article.get_absolute_url }}" class="btn btn-success">Read article</a>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+
+
+    </div>
+
+  </div>
+</main>
+
+{% endblock content %}
