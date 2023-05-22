@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+<main style="padding-top: 90px;">
+
+
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-12">
+          
+
+                  <form method="post" class="mx-1 mx-md-4">
+                    {% csrf_token %}
+                    {{form.media}}
+
+                    <div class="form-label" style="color: red;">{{form.non_field_errors}}</div>
+
+                    
+
+
+                    {% for item in form %}
+
+                    <div class="d-flex flex-row align-items-center">
+                      <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <label class="form-label" for="{{item.id_for_label}}">{{item.label}}</label>
+                        <div class="mb-3">
+                        {{item}}
+                      </div>
+
+                        <div class="form-label" style="color: red;">{{item.errors}} </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+
+
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <button type="submit" class="btn btn-success btn-lg">Send article for moderation</button>
+                    </div>
+
+                  </form>
+
+                </div>
+              </div>
+
+                </div>
+
+                
+
+
+
+</main>
+{% endblock content %}
