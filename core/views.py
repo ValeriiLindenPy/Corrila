@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.datastructures import MultiValueDictKeyError
@@ -68,11 +70,24 @@ class ShowCorrelation(View):
         return render(request, self.template, self.content)
 
     def post(self, request):
+        error_url = reverse('error')
         try:
             file = request.FILES["excel_file"]
         except MultiValueDictKeyError:
             # Redirect the user to the desired URL or display an error message
-            return redirect('error')
+            message = "Error: File upload failed - maybe you forgot to upload it"
+            return HttpResponseRedirect(f"{error_url}?message={message}")
+
+        # Default limit for non-authenticated users
+        file_size_limit = settings.NON_AUTHENTICATED_FILE_SIZE_LIMIT
+        if request.user.is_authenticated:
+            # Limit for authenticated users
+            file_size_limit = settings.AUTHENTICATED_FILE_SIZE_LIMIT
+
+        if file.size > file_size_limit:
+            # Redirect the user to the desired URL or display an error message
+            message = "Error: File upload failed max size exceeded for non-registered users 10 mb, for registered ones 20 mb"
+            return HttpResponseRedirect(f"{error_url}?message={message}")
 
         high_choice = False
         low_choice = False
@@ -153,8 +168,12 @@ class FeedSuccessbackFormView(TemplateView):
     template_name = "success-feedback.html"
 
 
-class ErrorView(TemplateView):
-    template_name = "error.html"
+def error_view(request):
+    message = request.GET.get('message', '')
+    context = {
+        'message': message
+    }
+    return render(request, 'error.html', context)
 
 
 class CreateArticleView(View, LoginRequiredMixin):
