@@ -92,66 +92,72 @@ class ShowCorrelation(View):
         high_choice = False
         low_choice = False
 
-        if request.POST.get("pearson", False) == "on":
-            correlaton_type_chosen = "pearson"
-        if request.POST.get("spearman", False) == "on":
-            correlaton_type_chosen = "spearman"
-        if request.POST.get("kendall", False) == "on":
-            correlaton_type_chosen = "kendall"
+        try:
 
-        if request.POST.get("high", False) == "on":
-            high_choice = True
-        if request.POST.get("low", False) == "on":
-            low_choice = True
+            if request.POST.get("pearson", False) == "on":
+                correlaton_type_chosen = "pearson"
+            if request.POST.get("spearman", False) == "on":
+                correlaton_type_chosen = "spearman"
+            if request.POST.get("kendall", False) == "on":
+                correlaton_type_chosen = "kendall"
 
-        correlator = CorrelationTools()
-        correlator.filter_low_high_corr(
-            file, method_chosen=correlaton_type_chosen)
+            if request.POST.get("high", False) == "on":
+                high_choice = True
+            if request.POST.get("low", False) == "on":
+                low_choice = True
 
-        if request.user.is_authenticated:
-            title = request.POST.get("title", False)
-            if low_choice:
-                low = correlator.get_low_corr()
+            correlator = CorrelationTools()
+            correlator.filter_low_high_corr(
+                file, method_chosen=correlaton_type_chosen)
+
+            if request.user.is_authenticated:
+                title = request.POST.get("title", False)
+                if low_choice:
+                    low = correlator.get_low_corr()
+                else:
+                    low = "Low correlation range has not been chosen"
+
+                if high_choice:
+                    high = correlator.get_high_corr()
+                else:
+                    high = "High correlation range has not been chosen"
+
+                Report.objects.create(
+                    title=title,
+                    correlaton_type=correlaton_type_chosen,
+                    low_correlaton_result=low,
+                    high_correlaton_result=high,
+                    author=request.user,
+                )
+                content = {
+                    "title": title,
+                    "correlaton_type": correlaton_type_chosen,
+                    "low_correlaton_result": low,
+                    "high_correlaton_result": high,
+                    "author": request.user.username,
+                }
+                return render(request, "report.html", content)
             else:
-                low = "Low correlation range has not been chosen"
+                if low_choice:
+                    low = correlator.get_low_corr()
+                else:
+                    low = "Low correlation range has not been chosen"
 
-            if high_choice:
-                high = correlator.get_high_corr()
-            else:
-                high = "High correlation range has not been chosen"
+                if high_choice:
+                    high = correlator.get_high_corr()
+                else:
+                    high = "High correlation range has not been chosen"
 
-            Report.objects.create(
-                title=title,
-                correlaton_type=correlaton_type_chosen,
-                low_correlaton_result=low,
-                high_correlaton_result=high,
-                author=request.user,
-            )
-            content = {
-                "title": title,
-                "correlaton_type": correlaton_type_chosen,
-                "low_correlaton_result": low,
-                "high_correlaton_result": high,
-                "author": request.user.username,
-            }
-            return render(request, "report.html", content)
-        else:
-            if low_choice:
-                low = correlator.get_low_corr()
-            else:
-                low = "Low correlation range has not been chosen"
-
-            if high_choice:
-                high = correlator.get_high_corr()
-            else:
-                high = "High correlation range has not been chosen"
-
-            content = {
-                "correlaton_type": correlaton_type_chosen,
-                "low_correlaton_result": low,
-                "high_correlaton_result": high,
-            }
-            return render(request, "report.html", content)
+                content = {
+                    "correlaton_type": correlaton_type_chosen,
+                    "low_correlaton_result": low,
+                    "high_correlaton_result": high,
+                }
+                return render(request, "report.html", content)
+        except ValueError:
+            # Redirect the user to the error page with the specific error message
+            message = "I seems like you are trying to upload incorrect file"
+            return HttpResponseRedirect(f"{error_url}?message={message}")
 
 
 class FeedbackFormView(FormView):
