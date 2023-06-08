@@ -28,6 +28,7 @@ def correlate_async(content):
             correlaton_type=content['correlaton_type'],
             author=user
         )
+        
         file_object.delete()
     except ObjectDoesNotExist:
         user = User.objects.get(pk=content['author'])

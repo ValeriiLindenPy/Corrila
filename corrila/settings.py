@@ -7,19 +7,18 @@ import django_heroku
 import environ
 
 
-env = environ.Env()
-
-environ.Env.read_env()
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -128,7 +127,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 # Use a different directory for collecting static files during deployment on Heroku
-if env('HEROKU_ENV', False):
+if os.environ.get('HEROKU_ENV', False):
     STATIC_ROOT = '/static'  # Update the STATIC_ROOT for Heroku
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -159,3 +158,4 @@ CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
