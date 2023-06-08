@@ -30,6 +30,7 @@ def correlate_async(content):
         )
         file_object.delete()
     except ObjectDoesNotExist:
+        user = User.objects.get(pk=content['author'])
         # Handle the case when the TemporaryFile object doesn't exist
         Report.objects.create(
             title=content['title'],
