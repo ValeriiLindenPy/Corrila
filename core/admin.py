@@ -10,4 +10,6 @@ class ArticleAdmin(admin.ModelAdmin):
 admin.site.register(Report)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Feedback)
+admin.site.register(TemporaryFile)
+
 

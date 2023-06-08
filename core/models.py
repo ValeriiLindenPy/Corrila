@@ -56,3 +56,7 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f'Feedback from {self.email} - {self.sending_date}'
+    
+    
+class TemporaryFile(models.Model):
+    file = models.FileField(upload_to='excel_files/')
