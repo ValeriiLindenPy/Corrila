@@ -4,14 +4,19 @@ from pathlib import Path
 
 import dj_database_url
 import django_heroku
+import environ
 
+
+env = environ.Env()
+
+environ.Env.read_env()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -123,7 +128,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 # Use a different directory for collecting static files during deployment on Heroku
-if os.environ.get('HEROKU_ENV', False):
+if env('HEROKU_ENV', False):
     STATIC_ROOT = '/static'  # Update the STATIC_ROOT for Heroku
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -147,7 +152,7 @@ DEFAULT_FROM_EMAIL = "valeriilinden@gmail.com"
 NON_AUTHENTICATED_FILE_SIZE_LIMIT = 10 * 1024 * 1024  # 10 MB
 AUTHENTICATED_FILE_SIZE_LIMIT = 20 * 1024 * 1024  # 20 MB
 
-REDIS_URL = os.environ.get('REDIS_URL')
+REDIS_URL = env('REDIS_URL')
 
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
