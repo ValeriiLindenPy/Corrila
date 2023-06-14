@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 
 # Create your models here.
 
@@ -18,16 +20,19 @@ class Article(models.Model):
     slug = models.SlugField(max_length=255, unique=True,
                             db_index=True, verbose_name='URL')
     moderated = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
-
+    
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('article', kwargs={'article_slug': self.slug})
+    
+    
+@receiver(pre_save, sender= Article)
+def add_slug_to_article(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = slugify(instance.title)
+    
 
 
 class Report(models.Model):
