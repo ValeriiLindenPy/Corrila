@@ -82,7 +82,7 @@ class ShowReport(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.id == int(user_id)
 
 
-class DeleteReport(DeleteView):
+class DeleteReport(DeleteView, LoginRequiredMixin):
     model = Report
     template_name = "delete-report.html"
     success_url = reverse_lazy("home")

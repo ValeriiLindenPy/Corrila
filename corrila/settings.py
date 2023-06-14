@@ -142,7 +142,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = "valeriilinden@gmail.com"
-EMAIL_HOST_PASSWORD = "evnouqicqnafbuqa"
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = "valeriilinden@gmail.com"
@@ -151,12 +151,5 @@ DEFAULT_FROM_EMAIL = "valeriilinden@gmail.com"
 NON_AUTHENTICATED_FILE_SIZE_LIMIT = 10 * 1024 * 1024  # 10 MB
 AUTHENTICATED_FILE_SIZE_LIMIT = 20 * 1024 * 1024  # 20 MB
 
-REDIS_URL = os.environ.get('REDIS_URL')
 
-CELERY_BROKER_URL = REDIS_URL
-CELERY_RESULT_BACKEND = REDIS_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = False
+
