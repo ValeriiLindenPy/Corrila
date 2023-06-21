@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+# TODO: Delete unused imports
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -15,6 +16,7 @@ class Profile(models.Model):
         return self.user.username
     
     def get_absolute_url(self):
+        # TODO: Fix extra spaces
         return reverse('profile', kwargs= {'user_id' : self.user.pk}) 
     
 

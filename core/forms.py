@@ -13,10 +13,11 @@ class FeedbackForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'id' :"exampleFormControlTextarea1"}),
         }
-        
+
+# TODO: Add one empty line
 class CreateArticleForm(forms.ModelForm):
     
-    
+    # TODO: Remove one empty line here
     class Meta:
         model = Article
         fields = ['title', 'preview_text', 'text']
@@ -27,4 +28,4 @@ class CreateArticleForm(forms.ModelForm):
         labels = {
             'preview_text': 'Make a preview for your article:',
             'text': '',
-        }
+        }# TODO: Go back to newline with cursor

@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
-
+# TODO: Delete import of unused
 from .views import ShowCorrelation
 from .models import Report
 
@@ -17,6 +17,7 @@ current_file_path = Path(__file__).resolve()
 class ShowCorrelationViewTest(TestCase):
     def test_show_correlation(self):
         # Create an authorized user
+        # TODO: You could also use FactoryBoy to create test initial data
         user = User.objects.create_user(username='testuser', password='testpassword')
 
         # Log in the user
@@ -37,7 +38,7 @@ class ShowCorrelationViewTest(TestCase):
                 'title': 'Test Report'
             })
             
-        
+            # TODO: Is that needed to test the entire array?
             expected_low_result = '''<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">

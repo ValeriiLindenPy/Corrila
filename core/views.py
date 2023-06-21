@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+# TODO: Delete unused imports
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -17,6 +18,7 @@ from .utils import CorrelationTools
 # Create your views here.
 
 
+# TODO: You can delete this unused functiom
 def previous_page(request):
     # Get the previous page URL from the request headers
     previous_url = request.META.get("HTTP_REFERER")
@@ -25,6 +27,7 @@ def previous_page(request):
     return redirect(previous_url)
 
 
+# TODO: Could we use ListView?
 class ShowHome(View):
     articles = Article.objects.all()[:3]
     content = {"title": "Corrila - Free Online Data Correlation", "description_data":
@@ -69,6 +72,7 @@ class ShowCorrelation(View):
     def get(self, request):
         return render(request, self.template, self.content)
 
+    # TODO: All of the Validation logic could be in a form?
     def post(self, request):
         error_url = reverse('error')
         try:
@@ -160,6 +164,7 @@ class ShowCorrelation(View):
             return HttpResponseRedirect(f"{error_url}?message={message}")
 
 
+# TODO: You can use a CreateView here
 class FeedbackFormView(FormView):
     template_name = 'submit-feedback.html'
     form_class = FeedbackForm
@@ -174,6 +179,7 @@ class FeedSuccessbackFormView(TemplateView):
     template_name = "success-feedback.html"
 
 
+# TODO: Add docstrings
 def error_view(request):
     message = request.GET.get('message', '')
     context = {
@@ -182,6 +188,7 @@ def error_view(request):
     return render(request, 'error.html', context)
 
 
+# TODO: You can use a CreateView here
 class CreateArticleView(View, LoginRequiredMixin):
     content = {"title": "Correlate data"}
     template = "create-article.html"

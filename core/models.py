@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+# TODO: Empty line between third party lib imports and project files imports
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -27,14 +28,14 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('article', kwargs={'article_slug': self.slug})
     
-    
+#TODO: Do you want to do that for updates as well?
 @receiver(pre_save, sender= Article)
 def add_slug_to_article(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.title)
     
 
-
+# TODO: Only two empty line at top level
 class Report(models.Model):
     title = models.CharField(max_length=250, blank=True)
     low_correlaton_result = models.TextField()

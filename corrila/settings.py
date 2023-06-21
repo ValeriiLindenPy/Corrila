@@ -18,6 +18,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO: You could create one settings file called base, another prod and and other dev.
+#   prod would overwrite DEBUG=False
+#   You can mention this file in the environment variable DJANGO_SETTINGS_MODULE, so that no worries anymore about forgetting DEBUG=False
+
 DEBUG = False
 
 ALLOWED_HOSTS = [
