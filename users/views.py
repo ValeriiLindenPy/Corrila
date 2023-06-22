@@ -45,11 +45,16 @@ class SignInUser(LoginView):
         return reverse_lazy("home")
 
 
+# TODO: You can use the default LogoutView from Django by passing the LOGOUT_REDIRECT_URL in the settings
+#   No need to create a new view
 def logout_user(request):
     logout(request)
     return redirect("sign-in")
 
 
+# TODO: Could you use a DetailView here instead of a normal View?
+#   It will manage for you get_object_or_404
+#   And you can overload the context to add reports and articles
 class ShowProfile(LoginRequiredMixin, UserPassesTestMixin, View):
     template = "profile.html"
 
@@ -62,11 +67,13 @@ class ShowProfile(LoginRequiredMixin, UserPassesTestMixin, View):
 
         return render(request, self.template, content)
 
+    # TODO: This function is used in other view. You can put it in a Mixin and reuse this Mixin
     def test_func(self):
         user_id = self.kwargs["user_id"]
         return self.request.user.id == int(user_id)
 
 
+# TODO: Could you use a DetailView here instead of a normal View?
 class ShowReport(LoginRequiredMixin, UserPassesTestMixin, View):
     template = "user-report.html"
 
@@ -76,6 +83,7 @@ class ShowReport(LoginRequiredMixin, UserPassesTestMixin, View):
 
         return render(request, self.template, content)
 
+    # TODO: This function is used in other view. You can put it in a Mixin and reuse this Mixin
     def test_func(self):
         reports = get_object_or_404(Report, pk=self.kwargs["report_id"])
         user_id = reports.author.pk

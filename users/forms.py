@@ -27,6 +27,7 @@ class ContactForm(forms.Form):
         email_message = f"Name: {name}\nEmail: {email}\n\nMessage: {message}"
 
         # Create and send the email
+        # TODO: Add one space between , and [
         email = EmailMessage(subject, email_message,[recipient_email])
         email.send()
 
@@ -39,7 +40,7 @@ class CustomPasswordResetConfirmForm(SetPasswordForm):
         self.fields['new_password2'].widget.attrs['class'] = 'form-control'
 
 
-
+# TODO: Remove one empty line. Currently two empty lines to separate classes defined at the top level of the file
 class CustomPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
 
@@ -63,12 +64,14 @@ class UserProfileCreationForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
+        # TODO: You can use super() directly (Python 3), super(UserProfileCreationForm, self) => Python 2 format
         user = super(UserProfileCreationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         user.username = self.cleaned_data["username"]
 
         if commit:
             user.save()
+            # TODO: Why do we need to create a profile since all of the information are already in User?
             profile = Profile.objects.create(user=user, occupation=self.cleaned_data["occupation"])
 
         return user
