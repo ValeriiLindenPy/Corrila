@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 
@@ -12,18 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'corrila.herokuapp.com',
-    'www.corrila.com',
+    "127.0.0.1",
+    "corrila.herokuapp.com",
+    "www.corrila.com",
 ]
 
 # User
@@ -79,9 +78,9 @@ WSGI_APPLICATION = "corrila.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -120,17 +119,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 # Use a different directory for collecting static files during deployment on Heroku
-if os.environ.get('HEROKU_ENV', False):
-    STATIC_ROOT = '/static'  # Update the STATIC_ROOT for Heroku
+if os.environ.get("HEROKU_ENV", False):
+    STATIC_ROOT = "/static"  # Update the STATIC_ROOT for Heroku
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -150,6 +149,3 @@ DEFAULT_FROM_EMAIL = "valeriilinden@gmail.com"
 # Files hendlers
 NON_AUTHENTICATED_FILE_SIZE_LIMIT = 10 * 1024 * 1024  # 10 MB
 AUTHENTICATED_FILE_SIZE_LIMIT = 20 * 1024 * 1024  # 20 MB
-
-
-

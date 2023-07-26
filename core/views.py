@@ -25,14 +25,19 @@ def previous_page(request):
     return redirect(previous_url)
 
 
-class ShowHome(View):
-    articles = Article.objects.all()[:3]
-    content = {"title": "Corrila - Free Online Data Correlation", "description_data":
-               "Corrila provides free online tools for data correlation. Choose the type of correlation coefficient: Pearson, Spearman or Kendall and get the results without having to download additional software.", "articles": articles}
-    template = "index.html"
+class ShowHome(ListView):
+    model = Article
+    queryset = Article.objects.all()[:3]
+    template_name = "index.html"
+    context_object_name = "articles"
 
-    def get(self, request):
-        return render(request, self.template, self.content)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Corrila - Free Online Data Correlation"
+        context[
+            "description_data"
+        ] = "Corrila provides free online tools for data correlation. Choose the type of correlation coefficient: Pearson, Spearman or Kendall and get the results without having to download additional software."
+        return context
 
 
 class ShowAbout(TemplateView):
@@ -70,7 +75,7 @@ class ShowCorrelation(View):
         return render(request, self.template, self.content)
 
     def post(self, request):
-        error_url = reverse('error')
+        error_url = reverse("error")
         try:
             file = request.FILES["excel_file"]
         except MultiValueDictKeyError:
@@ -93,7 +98,6 @@ class ShowCorrelation(View):
         low_choice = False
 
         try:
-
             if request.POST.get("pearson", False) == "on":
                 correlaton_type_chosen = "pearson"
             if request.POST.get("spearman", False) == "on":
@@ -107,8 +111,7 @@ class ShowCorrelation(View):
                 low_choice = True
 
             correlator = CorrelationTools()
-            correlator.filter_low_high_corr(
-                file, method_chosen=correlaton_type_chosen)
+            correlator.filter_low_high_corr(file, method_chosen=correlaton_type_chosen)
 
             if request.user.is_authenticated:
                 title = request.POST.get("title", False)
@@ -161,9 +164,9 @@ class ShowCorrelation(View):
 
 
 class FeedbackFormView(FormView):
-    template_name = 'submit-feedback.html'
+    template_name = "submit-feedback.html"
     form_class = FeedbackForm
-    success_url = reverse_lazy('success')
+    success_url = reverse_lazy("success")
 
     def form_valid(self, form):
         form.save()
@@ -175,11 +178,9 @@ class FeedSuccessbackFormView(TemplateView):
 
 
 def error_view(request):
-    message = request.GET.get('message', '')
-    context = {
-        'message': message
-    }
-    return render(request, 'error.html', context)
+    message = request.GET.get("message", "")
+    context = {"message": message}
+    return render(request, "error.html", context)
 
 
 class CreateArticleView(View, LoginRequiredMixin):
@@ -188,7 +189,7 @@ class CreateArticleView(View, LoginRequiredMixin):
 
     def get(self, request):
         form = CreateArticleForm()  # Create an instance of the form
-        return render(request, self.template, {'form': form, **self.content})
+        return render(request, self.template, {"form": form, **self.content})
 
     def post(self, request):
         form = CreateArticleForm(request.POST)
@@ -196,5 +197,5 @@ class CreateArticleView(View, LoginRequiredMixin):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-            return redirect('article', article_slug=article.slug)
-        return render(request, self.template, {'form': form})
+            return redirect("article", article_slug=article.slug)
+        return render(request, self.template, {"form": form})

@@ -12,27 +12,29 @@ from django.db.models.signals import pre_save
 class Article(models.Model):
     title = models.CharField(max_length=250, blank=False)
     preview_text = models.TextField(
-        blank=False, default='Somthing intresting inside the article. Just read it!')
-    text = RichTextField(blank=False, null=True,
-                         default='Write somthing about statisics or correlation')
+        blank=False, default="Somthing intresting inside the article. Just read it!"
+    )
+    text = RichTextField(
+        blank=False, null=True, default="Write somthing about statisics or correlation"
+    )
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     pubplication_date = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(max_length=255, unique=True,
-                            db_index=True, verbose_name='URL')
+    slug = models.SlugField(
+        max_length=255, unique=True, db_index=True, verbose_name="URL"
+    )
     moderated = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('article', kwargs={'article_slug': self.slug})
-    
-    
-@receiver(pre_save, sender= Article)
+        return reverse("article", kwargs={"article_slug": self.slug})
+
+
+@receiver(pre_save, sender=Article)
 def add_slug_to_article(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.title)
-    
 
 
 class Report(models.Model):
@@ -41,15 +43,14 @@ class Report(models.Model):
     high_correlaton_result = models.TextField()
     correlatons_range = models.CharField(max_length=250, blank=True)
     correlaton_type = models.CharField(max_length=250)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     pubplication_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Report of user {self.author} named "{self.title}" - {self.pubplication_date}'
 
     def get_absolute_url(self):
-        return reverse('report', kwargs={'report_id': self.pk})
+        return reverse("report", kwargs={"report_id": self.pk})
 
 
 class Feedback(models.Model):
@@ -60,8 +61,8 @@ class Feedback(models.Model):
     sending_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Feedback from {self.email} - {self.sending_date}'
-    
-    
+        return f"Feedback from {self.email} - {self.sending_date}"
+
+
 class TemporaryFile(models.Model):
-    file = models.FileField(upload_to='excel_files/')
+    file = models.FileField(upload_to="excel_files/")
