@@ -8,21 +8,13 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views import View
 from django.views.generic import ListView, TemplateView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView
 
 from .forms import CreateArticleForm, FeedbackForm
 from .models import *
 from .utils import CorrelationTools
 
 # Create your views here.
-
-
-def previous_page(request):
-    # Get the previous page URL from the request headers
-    previous_url = request.META.get("HTTP_REFERER")
-
-    # Redirect to the previous URL
-    return redirect(previous_url)
 
 
 class ShowHome(ListView):
@@ -163,7 +155,7 @@ class ShowCorrelation(View):
             return HttpResponseRedirect(f"{error_url}?message={message}")
 
 
-class FeedbackFormView(FormView):
+class FeedbackFormView(CreateView):
     template_name = "submit-feedback.html"
     form_class = FeedbackForm
     success_url = reverse_lazy("success")
@@ -178,24 +170,33 @@ class FeedSuccessbackFormView(TemplateView):
 
 
 def error_view(request):
+    """
+    A view function to render an error page with an optional error message.
+
+    Parameters:
+        request (HttpRequest): The request object passed by Django.
+
+    Returns:
+        HttpResponse: A response containing the rendered error.html template.
+
+    Example Usage:
+        # In your urls.py, add the following URL pattern to map to this view:
+        path('error/', error_view, name='error')
+    """
     message = request.GET.get("message", "")
     context = {"message": message}
     return render(request, "error.html", context)
 
 
-class CreateArticleView(View, LoginRequiredMixin):
-    content = {"title": "Correlate data"}
-    template = "create-article.html"
+class CreateArticleView(LoginRequiredMixin, CreateView):
+    model = Article
+    form_class = CreateArticleForm
+    template_name = "create-article.html"
+    success_url = reverse_lazy("article")
 
-    def get(self, request):
-        form = CreateArticleForm()  # Create an instance of the form
-        return render(request, self.template, {"form": form, **self.content})
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-    def post(self, request):
-        form = CreateArticleForm(request.POST)
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user
-            article.save()
-            return redirect("article", article_slug=article.slug)
-        return render(request, self.template, {"form": form})
+    def get_success_url(self):
+        return self.object.get_absolute_url()

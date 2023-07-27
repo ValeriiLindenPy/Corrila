@@ -102,9 +102,9 @@ class CorrelationTools:
         return "No high correlation found"
 
     @staticmethod
-    def is_empty(dic: dict) -> bool:
+    def is_empty(correlation_dict: Dict[str, float]) -> bool:
         values_list = []
-        for i in dic:
-            for x in dic[i]:
+        for i in correlation_dict:
+            for x in correlation_dict[i]:
                 values_list.append(x)
         return bool(values_list)

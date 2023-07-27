@@ -34,7 +34,13 @@ class Article(models.Model):
 @receiver(pre_save, sender=Article)
 def add_slug_to_article(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = slugify(instance.title)
+        base_slug = slugify(instance.title)
+        new_slug = base_slug
+        num = 1
+        while Article.objects.filter(slug=new_slug).exists():
+            new_slug = f"{base_slug}-{num}"
+            num += 1
+        instance.slug = new_slug
 
 
 class Report(models.Model):

@@ -17,17 +17,19 @@ class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea)
 
     def send_email(self):
-        subject = 'Corrila feedback Submission'
-        recipient_email = 'v.linden@mail.ru'  # Replace with the recipient's email address
+        subject = "Corrila feedback Submission"
+        recipient_email = (
+            "v.linden@mail.ru"  # Replace with the recipient's email address
+        )
 
         # Construct the email message using the form data
-        name = self.cleaned_data['name']
-        email = self.cleaned_data['email']
-        message = self.cleaned_data['message']
+        name = self.cleaned_data["name"]
+        email = self.cleaned_data["email"]
+        message = self.cleaned_data["message"]
         email_message = f"Name: {name}\nEmail: {email}\n\nMessage: {message}"
 
         # Create and send the email
-        email = EmailMessage(subject, email_message,[recipient_email])
+        email = EmailMessage(subject, email_message, [recipient_email])
         email.send()
 
 
@@ -35,9 +37,8 @@ class CustomPasswordResetConfirmForm(SetPasswordForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add your custom classes to the form fields
-        self.fields['new_password1'].widget.attrs['class'] = 'form-control'
-        self.fields['new_password2'].widget.attrs['class'] = 'form-control'
-
+        self.fields["new_password1"].widget.attrs["class"] = "form-control"
+        self.fields["new_password2"].widget.attrs["class"] = "form-control"
 
 
 class CustomPasswordResetForm(PasswordResetForm):
@@ -45,11 +46,18 @@ class CustomPasswordResetForm(PasswordResetForm):
 
 
 class UserProfileCreationForm(UserCreationForm):
-    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={"class": "form-control"}))
-    email = forms.CharField(label="Email", widget=forms.EmailInput(attrs={"class": "form-control"}))
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    username = forms.CharField(
+        label="Username", widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    email = forms.CharField(
+        label="Email", widget=forms.EmailInput(attrs={"class": "form-control"})
+    )
+    password1 = forms.CharField(
+        label="Password", widget=forms.PasswordInput(attrs={"class": "form-control"})
+    )
     password2 = forms.CharField(
-        label="Repeat your password", widget=forms.PasswordInput(attrs={"class": "form-control"})
+        label="Repeat your password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
     occupation = forms.CharField(
         label="Your occupation (optional)",
@@ -69,11 +77,17 @@ class UserProfileCreationForm(UserCreationForm):
 
         if commit:
             user.save()
-            profile = Profile.objects.create(user=user, occupation=self.cleaned_data["occupation"])
+            profile = Profile.objects.create(
+                user=user, occupation=self.cleaned_data["occupation"]
+            )
 
         return user
 
 
 class CorrilaAutnenticationForm(AuthenticationForm):
-    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={"class": "form-control"}))
-    password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    username = forms.CharField(
+        label="Username", widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    password = forms.CharField(
+        label="Password", widget=forms.PasswordInput(attrs={"class": "form-control"})
+    )

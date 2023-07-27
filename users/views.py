@@ -45,11 +45,6 @@ class SignInUser(LoginView):
         return reverse_lazy("home")
 
 
-def logout_user(request):
-    logout(request)
-    return redirect("sign-in")
-
-
 class ShowProfile(LoginRequiredMixin, UserPassesTestMixin, View):
     template = "profile.html"
 
@@ -57,8 +52,12 @@ class ShowProfile(LoginRequiredMixin, UserPassesTestMixin, View):
         user = get_object_or_404(User, id=user_id)
         reports = Report.objects.filter(author=user)
         articles = Article.objects.filter(author=user)
-        content = {"title": f"Corrila Account",
-                   "user": user, "reports": reports, "articles": articles}
+        content = {
+            "title": f"Corrila Account",
+            "user": user,
+            "reports": reports,
+            "articles": articles,
+        }
 
         return render(request, self.template, content)
 
