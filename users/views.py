@@ -37,7 +37,7 @@ class SignInUser(LoginView):
     template_name = "sign-in.html"
 
     def get_context_data(self, **kwargs):
-        context = super(SignInUser, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["title"] = "Sign-in - Corrila"
         return context
 

@@ -53,7 +53,8 @@ class Report(models.Model):
     pubplication_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Report of user {self.author} named "{self.title}" - {self.pubplication_date}'
+        # return f'Report of user {self.author} named "{self.title}" - {self.pubplication_date}'
+        return self.title
 
     def get_absolute_url(self):
         return reverse("report", kwargs={"report_id": self.pk})

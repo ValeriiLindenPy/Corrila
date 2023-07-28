@@ -67,6 +67,8 @@ class ShowCorrelation(View):
         return render(request, self.template, self.content)
 
     def post(self, request):
+        print("Request POST data:", request.POST)
+        print("Request FILES data:", request.FILES)
         error_url = reverse("error")
         try:
             file = request.FILES["excel_file"]
@@ -116,6 +118,13 @@ class ShowCorrelation(View):
                     high = correlator.get_high_corr()
                 else:
                     high = "High correlation range has not been chosen"
+
+                print("correlaton_type_chosen:", correlaton_type_chosen)
+                print("low_choice:", low_choice)
+                print("high_choice:", high_choice)
+                print("Title:", title)
+                print("Low Correlation Result:", low)
+                print("High Correlation Result:", high)
 
                 Report.objects.create(
                     title=title,
