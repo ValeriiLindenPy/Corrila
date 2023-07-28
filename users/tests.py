@@ -1,11 +1,13 @@
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
+from core.models import Report
 from core.tests.profile_factory import ProfileFactory
 from django.contrib.auth.models import User
 from django.contrib.auth import SESSION_KEY
 from users.forms import UserProfileCreationForm
 from users.views import SignUpUser
 from .models import Profile
+from django.urls import reverse
 
 
 class ProfileModelTestCase(TestCase):
@@ -61,3 +63,18 @@ class SignInUserTest(TestCase):
             {"username": self.user.user.username, "password": self.user.user.password},
         )
         self.assertEqual(response.status_code, 200)
+
+
+# class ShowReportTestCase(TestCase):
+#     def setUp(self):
+#         self.user: Profile = ProfileFactory.create()
+#         self.report = Report.objects.create(title="Test Report", author=self.user.user)
+
+#     def test_authenticated_user_can_access_report(self):
+#         self.client.login(
+#             username=self.user.user.username, password=self.user.user.password
+#         )
+#         url = reverse("report", kwargs={"report_id": self.report.pk})
+#         response = self.client.get(url)
+#         self.assertEqual(response.status_code, 200)
+#         self.assertContains(response, self.report.title)
